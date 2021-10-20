@@ -6,7 +6,8 @@
     <div
       v-show="visible"
       class="el-dialog__wrapper"
-      @click.self="handleWrapperClick">
+      @click.self="handleWrapperClick"> 
+      <!-- .self 跳过冒泡事件和捕获事件，只有直接作用在该元素上的事件才可以执行 -->
       <div
         role="dialog"
         :key="key"
@@ -62,7 +63,7 @@
         type: Boolean,
         default: true
       },
-
+      // appendToBody 默认为false, dialog的dom 也就是插入在父组件的dom里
       appendToBody: {
         type: Boolean,
         default: false
@@ -72,7 +73,7 @@
         type: Boolean,
         default: true
       },
-
+      // 是否可以通过点击 modal遮罩层 关闭 Dialog，dialog-wrapper是包含遮罩层的
       closeOnClickModal: {
         type: Boolean,
         default: true
@@ -185,9 +186,11 @@
         this.broadcast('ElDropdownMenu', 'updatePopper');
       },
       afterEnter() {
+        // 入场动画完成，监听钩子，向外抛dialog打开的事件
         this.$emit('opened');
       },
       afterLeave() {
+        // 离场动画完成
         this.$emit('closed');
       }
     },

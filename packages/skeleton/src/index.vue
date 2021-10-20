@@ -14,11 +14,18 @@
               }"
               variant="p"
             />
+            <!-- 
+                多个class类名操控样式 精简两种写法
+                :class="{ 'class1': true, 'class2': false }" 
+                :class="['class1','class2', true ? 'class3': '']"
+             -->
           </slot>
         </template>
       </div>
     </template>
-    <template v-else>
+    <!-- 默认default插槽 用来渲染真实展现的dom -->
+    <template v-else> 
+      <!-- 多层组件嵌套 属性透传 -->
       <slot v-bind="$attrs"></slot>
     </template>
   </div>
@@ -31,7 +38,7 @@ export default {
       type: Boolean,
       default: false
     },
-    count: {
+    count: {  
       type: Number,
       default: 1
     },
@@ -39,11 +46,11 @@ export default {
       type: Number,
       default: 4
     },
-    loading: {
+    loading: { // 是否显示骨架屏
       type: Boolean,
       default: true
     },
-    throttle: {
+    throttle: { // 防抖，避免数据请求过快，骨架屏一闪而过
       type: Number,
       default: 0
     }
@@ -51,6 +58,7 @@ export default {
   watch: {
     loading: {
       handler(loading) {
+        // 不设置防抖延迟，loading就根据接口请求的时间，来切换显示状态
         if (this.throttle <= 0) {
           this.uiLoading = loading;
           return;
@@ -59,7 +67,7 @@ export default {
           clearTimeout(this.timeoutHandle);
           this.timeoutHandle = setTimeout(() => {
             this.uiLoading = this.loading;
-          }, this.throttle);
+          }, this.throttle); // 骨架屏至少显示 throttle 毫秒
         } else {
           this.uiLoading = loading;
         }

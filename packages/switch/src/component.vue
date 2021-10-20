@@ -7,6 +7,7 @@
     :aria-disabled="switchDisabled"
     @click.prevent="switchValue"
   >
+    <!-- switch状态切换只有正反，checkbox也是，所以基于checkbox拓展 -->
     <input
       class="el-switch__input"
       type="checkbox"
@@ -103,6 +104,7 @@
       };
     },
     created() {
+      // indexOf函数返回-1，表示不包含该值，~-1的值是0，其他值就不是0，!~-1 => !0 => true, !1 => false，所以还是表示不包含该值得意思
       if (!~[this.activeValue, this.inactiveValue].indexOf(this.value)) {
         this.$emit('input', this.inactiveValue);
       }
@@ -122,6 +124,7 @@
           this.setBackgroundColor();
         }
         if (this.validateEvent) {
+          // 父链定向寻找指定名称的组件，$emit触发事件
           this.dispatch('ElFormItem', 'el.form.change', [this.value]);
         }
       }
@@ -164,6 +167,7 @@
       /* istanbul ignore if */
       this.coreWidth = this.width || 40;
       if (this.activeColor || this.inactiveColor) {
+        // 初始化开关 背景色
         this.setBackgroundColor();
       }
       this.$refs.input.checked = this.checked;
