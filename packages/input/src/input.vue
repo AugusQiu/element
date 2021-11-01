@@ -1,4 +1,5 @@
 <template>
+  <!-- $slots是一个对象，key:插槽的具名，value:渲染的各个节点 -->
   <div :class="[
     type === 'textarea' ? 'el-textarea' : 'el-input',
     inputSize ? 'el-input--' + inputSize : '',
@@ -20,6 +21,7 @@
       <div class="el-input-group__prepend" v-if="$slots.prepend">
         <slot name="prepend"></slot>
       </div>
+      <!-- tabIndex属性：按tab键 在不同html标签上前后（从0开始，数字从小到大，-1不受tab所控）的移动顺序 -->
       <input
         :tabindex="tabindex"
         v-if="type !== 'textarea'"

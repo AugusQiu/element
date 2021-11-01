@@ -80,6 +80,8 @@ export default function calcTextareaHeight(
   }
 
   hiddenTextarea.value = '';
+  // scrollHeight只读属性，衡量元素内容高度，包括由于溢出导致视图中不可见的内容
+  // textarea元素的值先置为空，就可以计算出单行文字的高度，我测试了一下，scrollHeight为19px（应该与默认字体大小、line-height这些属性有关）
   let singleRowHeight = hiddenTextarea.scrollHeight - paddingSize;
 
   if (minRows !== null) {
