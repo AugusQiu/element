@@ -245,6 +245,8 @@
           !this.showPassword;
       },
       upperLimit() {
+        // maxlength input原生属性
+        // $attrs：父组件引用使用该子组件添加的属性，没有被子组件props接受的属性(class 和 style 除外)，常用于父孙组件隔代通信，$attrs作为中间站转发
         return this.$attrs.maxlength;
       },
       textLength() {
@@ -339,7 +341,9 @@
         this.focused = true;
         this.$emit('focus', event);
       },
+      // 监测输入法中文开始输入，避免中文输入法下打了拼音首字母就开始触发
       handleCompositionStart() {
+        // 加锁
         this.isComposing = true;
       },
       handleCompositionUpdate(event) {
