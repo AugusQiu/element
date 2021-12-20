@@ -74,6 +74,7 @@
       };
     },
     created() {
+      // form-item dispatch定向抛出事件，监听将form-item实例添加进fields实例
       this.$on('el.form.addField', (field) => {
         if (field) {
           this.fields.push(field);
@@ -93,10 +94,12 @@
           return;
         }
         this.fields.forEach(field => {
+          // form组件重置表单，实际上就是依次调用每个form-item本身的重置方法
           field.resetField();
         });
       },
       clearValidate(props = []) {
+        // 不传props参数，默认移除整个表单的校验，也可通过prop指定移除
         const fields = props.length
           ? (typeof props === 'string'
             ? this.fields.filter(field => props === field.prop)

@@ -130,6 +130,7 @@
       form() {
         let parent = this.$parent;
         let parentName = parent.$options.componentName;
+        // 沿着父链递归向上获取包裹在最外面的Form组件
         while (parentName !== 'ElForm') {
           if (parentName === 'ElFormItem') {
             this.isNested = true;
@@ -187,7 +188,7 @@
     },
     methods: {
       validate(trigger, callback = noop) {
-        this.validateDisabled = false;
+        this.validateDisabled = false; // 启用校验
         const rules = this.getFilteredRule(trigger);
         if ((!rules || rules.length === 0) && this.required === undefined) {
           callback();
@@ -232,11 +233,20 @@
         if (path.indexOf(':') !== -1) {
           path = path.replace(/:/, '.');
         }
-
+         
+        /*
+          getPropByPath函数返回：
+          {
+            o: tempObj,
+            k: keyArr[i],
+            v: tempObj ? tempObj[keyArr[i]] : null
+          };
+        */
         let prop = getPropByPath(model, path, true);
 
         this.validateDisabled = true;
         if (Array.isArray(value)) {
+          
           prop.o[prop.k] = [].concat(this.initialValue);
         } else {
           prop.o[prop.k] = this.initialValue;
@@ -246,7 +256,8 @@
         this.$nextTick(() => {
           this.validateDisabled = false;
         });
-
+        
+        // broadcast 向下传播到当前实例的所有后代，由于后代扩展为多个子树，事件传播将会遵循许多不同的“路径”，除非回调显式返回true，否则不会无休止传播
         this.broadcast('ElTimeSelect', 'fieldReset', this.initialValue);
       },
       getRules() {
@@ -260,7 +271,7 @@
         return [].concat(selfRules || formRules || []).concat(requiredRule);
       },
       getFilteredRule(trigger) {
-        const rules = this.getRules();
+        const rules = this.getRules(); // [ { required:true, message:'', trigger:'blur'},{ min:'', message:'' }]
 
         return rules.filter(rule => {
           if (!rule.trigger || trigger === '') return true;
@@ -294,7 +305,7 @@
         }
       },
       removeValidateEvents() {
-        this.$off();
+        this.$off();   // 移除当前组件实例上的所有事件监听器
       }
     },
     mounted() {
@@ -303,9 +314,11 @@
 
         let initialValue = this.fieldValue;
         if (Array.isArray(initialValue)) {
+          // [].concat([1]) => [1] [].concat('1') => ['1']
           initialValue = [].concat(initialValue);
         }
         Object.defineProperty(this, 'initialValue', {
+          // initalValue 初始化值
           value: initialValue
         });
 
